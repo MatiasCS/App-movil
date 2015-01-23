@@ -1,0 +1,21 @@
+/* Empty. Add your own CSS if you like */
+.bar.bar-positive{
+	background-color: rgb(64, 76, 89);
+	border-color: rgb(64, 76, 89);
+}
+
+.bar.bar-positive h1{
+	font-family: Helvetica;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.ion-ios-plus-outline{
+	float: right;
+}
+
+.estado{
+	width: 30%;
+	height: 20%;
+	font-size: 60%;
+}

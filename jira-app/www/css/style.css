@@ -1,7 +1,7 @@
 /* Empty. Add your own CSS if you like */
 .bar.bar-positive{
-	background-color: rgb(64, 76, 89);
-	border-color: rgb(64, 76, 89);
+	background-color: #404C59;
+	border-color: #404C59;
 }
 
 .bar.bar-positive h1{
@@ -18,4 +18,31 @@
 	width: 30%;
 	height: 20%;
 	font-size: 60%;
+}
+
+.en-progreso{
+	color: #594300;
+	font-size: 10px !important;
+	border-style: solid !important;
+	border-color: #ffe28c;
+	border-width: 1px;
+	border-radius: 5px !important;
+}
+
+.resumen-incidencia{
+	padding-top: 9px;
+}
+
+.backlog{
+	color: #4a6785;
+	font-size: 10px !important;
+	border-style: solid !important;
+	border-color: #e4e8ed;
+	border-width: 1px;
+	border-radius: 5px !important;
+}
+
+.button-clear{
+	font-size: 14px !important;
+	color: #EFE9E9 !important;
 }

@@ -20,10 +20,13 @@
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
+
   </head>
   <body ng-app="starter">
 
+    <!--menu principal y lateral-->
     <ion-side-menus>
+
     <!-- Center content -->
     <ion-side-menu-content>
       <ion-header-bar class="bar-positive">
@@ -31,23 +34,39 @@
             <i class="icon ion-navicon"></i>
         </button>
         <h1 class="title">Incidencias</h1>
-        <button class= "button button-icon" ng-click="newTask()">
+        <button class= "button button-icon" ng-controller="MainCtrl" ng-click="openModal()">
             <i class="icon ion-ios-plus-empty"></i>
         </button>
       </ion-header-bar>
       <ion-content>
+
       <!--Cartas con los distintos tasks-->
         <div class="list card">
           <div class="item item-avatar">
-            <img src="mcfly.jpg">
+            <img src="img/profile-icon.png">
             <h2>TIS-58</h2>
-            <span class="badge badge-energized estado">EN PROGRESO</span>
-            <p>Resumen de la actividad</p>
+            <span class="badge en-progreso">EN PROGRESO</span>
+            <p class="resumen-incidencia">Add feedback button to the plugin sample code</p>
           </div>
 
           <div class="item item-body">
             <p>
-              Descripción de la Incidencia...
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget interdum enim. Nunc hendrerit malesuada eleifend. Quisque congue massa condimentum sem aliquam sodales. Nunc dignissim eros et sodales finibus.
+            </p>
+          </div>
+        </div>
+
+        <div class="list card">
+          <div class="item item-avatar">
+            <img src="img/profile-icon.png">
+            <h2>TIS-59</h2>
+            <span class="badge backlog">BACKLOG</span>
+            <p class="resumen-incidencia">Add feedback button to the plugin sample code</p>
+          </div>
+
+          <div class="item item-body">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget interdum enim. Nunc hendrerit malesuada eleifend. Quisque congue massa condimentum sem aliquam sodales. Nunc dignissim eros et sodales finibus.
             </p>
           </div>
         </div>
@@ -61,5 +80,29 @@
       </ion-header-bar>
     </ion-side-menu>
   </ion-side-menus>
+
+  <!--modal template-->
+  <script id="contact-modal.html" type="text/ng-template">
+    <div class="modal">
+      <ion-header-bar class= "bar-positive">
+        <button class="button button-clear button-positive" ng-click="closeModal()">Cancelar</button>
+        <h1 class="title">Crear Incidencia</h1>
+        <button class="button button-clear button-positive">OK</button>
+      </ion-header-bar>
+      <ion-content>
+        <div class="list">
+          <label class="item item-input">
+            <span class="input-label">Name</span>
+            <input type="text" ng-model="contact.name">
+          </label>
+          <label class="item item-input">
+            <span class="input-label">Info</span>
+            <input type="text" ng-model="contact.info">
+          </label>
+        </div>
+      </ion-content>
+    </div>
+  </script>
+
   </body>
 </html>

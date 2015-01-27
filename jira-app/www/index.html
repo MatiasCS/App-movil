@@ -41,35 +41,18 @@
       <ion-content>
 
       <!--Cartas con los distintos tasks-->
-        <div class="list card">
-          <div class="item item-avatar">
-            <img src="img/profile-icon.png">
-            <h2>TIS-58</h2>
-            <span class="badge en-progreso">EN PROGRESO</span>
-            <p class="resumen-incidencia">Add feedback button to the plugin sample code</p>
+      <div ng-controller = "CardCtrl">
+          <div ng-repeat = "task in tasks">
+            <a class="item">
+              <h2 class="key">{{task.key}}</h2>
+              <span class="badge" ng-class="getClass(task.fields.status.name)">{{task.fields.status.name}}</span>
+              <p class="resumen-incidencia">{{task.fields.summary}}</p>
+              <p class ="descripcion">
+                {{task.fields.description}}
+              </p>
+            </a>
           </div>
-
-          <div class="item item-body">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget interdum enim. Nunc hendrerit malesuada eleifend. Quisque congue massa condimentum sem aliquam sodales. Nunc dignissim eros et sodales finibus.
-            </p>
-          </div>
-        </div>
-
-        <div class="list card">
-          <div class="item item-avatar">
-            <img src="img/profile-icon.png">
-            <h2>TIS-59</h2>
-            <span class="badge backlog">BACKLOG</span>
-            <p class="resumen-incidencia">Add feedback button to the plugin sample code</p>
-          </div>
-
-          <div class="item item-body">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam eget interdum enim. Nunc hendrerit malesuada eleifend. Quisque congue massa condimentum sem aliquam sodales. Nunc dignissim eros et sodales finibus.
-            </p>
-          </div>
-        </div>
+      </div>
       </ion-content>
     </ion-side-menu-content>
 
@@ -92,12 +75,22 @@
       <ion-content>
         <div class="list">
           <label class="item item-input">
-            <span class="input-label">Name</span>
-            <input type="text" ng-model="contact.name">
+            <input type="text" placeholder="Proyecto">
           </label>
           <label class="item item-input">
-            <span class="input-label">Info</span>
-            <input type="text" ng-model="contact.info">
+            <input type="text" placeholder="Incidencia">
+          </label>
+          <label class="item item-input">
+            <input type="text" placeholder="Resumen">
+          </label>
+          <label class="item item-input">
+            <input type="text" placeholder="Prioridad">
+          </label>
+          <label class="item item-input">
+            <input type="text" placeholder="Informador">
+          </label>
+          <label class="item item-input">
+            <input type="text" placeholder="Descripción">
           </label>
         </div>
       </ion-content>

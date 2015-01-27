@@ -5,11 +5,35 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
+.controller('CardCtrl',function($scope, $http){
+  $http.get('issues.json').success(function(data) {
+    $scope.tasks = data.issues;
+  })
+
+  $scope.getClass = function(name){
+    var clase;
+    switch(name){
+      case 'En progreso':
+        clase = 'en-progreso';
+        break;
+      case 'Backlog':
+        clase = 'backlog';
+        break;
+
+      case 'Listo':
+        clase = 'listo';
+        break;
+
+      default:
+        clase = '';
+        break;
+    }
+
+    return clase;
+  };
+})
+
 .controller('MainCtrl', function($scope, $ionicModal) {
-  $scope.contact = {
-    name: 'Mittens Cat',
-    info: 'Tap anywhere on the card to open the modal'
-  }
 
   $ionicModal.fromTemplateUrl('contact-modal.html', {
     scope: $scope,

@@ -27,10 +27,19 @@
 	border-color: #ffe28c;
 	border-width: 1px;
 	border-radius: 5px !important;
+	text-transform: uppercase;
 }
 
 .resumen-incidencia{
 	padding-top: 9px;
+	font-weight: bold;
+	font-size: 13px !important;
+	color: black !important;
+}
+
+.key{
+	font-size: 11px !important;
+	color: #7E7E7E;
 }
 
 .backlog{
@@ -40,9 +49,35 @@
 	border-color: #e4e8ed;
 	border-width: 1px;
 	border-radius: 5px !important;
+	text-transform: uppercase;
 }
 
 .button-clear{
 	font-size: 14px !important;
 	color: #EFE9E9 !important;
+}
+
+.listo{
+	color: #14892c;
+	font-size: 10px !important;
+	border-style: solid !important;
+	border-color:#b2d8b9;
+	border-width: 1px;
+	border-radius: 5px !important;
+	text-transform: uppercase;
+}
+
+.descripcion{
+	font-size: 11px !important;
+	text-align: justify;
+}
+
+.item{
+	padding: 10px;
+}
+
+.badge{
+	padding: 0px;
+	padding-left: 3px;
+	padding-right: 3px;
 }

@@ -5,7 +5,78 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider.state('sidemenu', {
+    url: '/principal',
+    templateUrl: "templates/side-bar.html"
+  })
+
+  .state('sidemenu.home', {
+      url: "/home",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/home.html",
+          controller: "CardCtrl"
+        }
+      }
+    })
+
+  .state('sidemenu.boards',{
+    url: "/boards",
+    views:{
+      'menuContent':{
+        templateUrl: "templates/tab-menu.html",
+      }
+    }
+  })
+
+  .state('sidemenu.boards.backlog',{
+    url: "/backlog",
+    views:{
+      'tabContent':{
+        templateUrl: "templates/backlog.html",
+        controller: "BLCtrl"
+      }
+    }
+  })
+  $urlRouterProvider.otherwise("/principal/home");
+})
+
+.controller("ContentCtrl",function($scope, $ionicSideMenuDelegate) {
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  }
+})
+
 .controller('CardCtrl',function($scope, $http){
+  $http.get('issues.json').success(function(data) {
+    $scope.tasks = data.issues;
+  })
+
+  $scope.getClass = function(name){
+    var clase;
+    switch(name){
+      case 'En progreso':
+        clase = 'en-progreso';
+        break;
+      case 'Backlog':
+        clase = 'backlog';
+        break;
+
+      case 'Listo':
+        clase = 'listo';
+        break;
+
+      default:
+        clase = '';
+        break;
+    }
+
+    return clase;
+  };
+})
+
+.controller('BLCtrl',function($scope, $http){
   $http.get('issues.json').success(function(data) {
     $scope.tasks = data.issues;
   })
@@ -35,7 +106,7 @@ angular.module('starter', ['ionic'])
 
 .controller('MainCtrl', function($scope, $ionicModal) {
 
-  $ionicModal.fromTemplateUrl('contact-modal.html', {
+  $ionicModal.fromTemplateUrl('templates/new-modal.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {

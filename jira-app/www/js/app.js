@@ -35,7 +35,30 @@ angular.module('starter', ['ionic'])
     views:{
       'tabContent':{
         templateUrl: "templates/backlog.html",
-        controller: "BLCtrl"
+        controller: "BLCtrl",
+        activetab: "progreso"
+      }
+    }
+  })
+
+  .state('sidemenu.boards.progreso',{
+    url: "/progreso",
+    views:{
+      'tabContent':{
+        templateUrl: "templates/progreso.html",
+        controller: "ProCtrl",
+        activetab: "progreso"
+      }
+    }
+  })
+
+  .state('sidemenu.boards.listo',{
+    url: "/listo",
+    views:{
+      'tabContent':{
+        templateUrl: "templates/listo.html",
+        controller: "LiCtrl",
+        activetab: "listo"
       }
     }
   })
@@ -77,6 +100,62 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('BLCtrl',function($scope, $http){
+  $http.get('backlog.json').success(function(data) {
+    $scope.tasks = data.issues;
+  })
+
+  $scope.getClass = function(name){
+    var clase;
+    switch(name){
+      case 'En progreso':
+        clase = 'en-progreso';
+        break;
+      case 'Backlog':
+        clase = 'backlog';
+        break;
+
+      case 'Listo':
+        clase = 'listo';
+        break;
+
+      default:
+        clase = '';
+        break;
+    }
+
+    return clase;
+  };
+})
+
+.controller('LiCtrl',function($scope, $http){
+  $http.get('listos.json').success(function(data) {
+    $scope.tasks = data.issues;
+  })
+
+  $scope.getClass = function(name){
+    var clase;
+    switch(name){
+      case 'En progreso':
+        clase = 'en-progreso';
+        break;
+      case 'Backlog':
+        clase = 'backlog';
+        break;
+
+      case 'Listo':
+        clase = 'listo';
+        break;
+
+      default:
+        clase = '';
+        break;
+    }
+
+    return clase;
+  };
+})
+
+.controller('ProCtrl',function($scope, $http){
   $http.get('issues.json').success(function(data) {
     $scope.tasks = data.issues;
   })

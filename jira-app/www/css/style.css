@@ -89,3 +89,29 @@
 .menu-lateral{
 	background-color: lightgray;
 }
+
+.active-backlog{
+	border: 0 solid #4a6785 !important;
+	color: #4a6785 !important;
+	border-top-width: 2px !important;
+}
+
+.active-progreso{
+	border: 0 solid #f6c342 !important;
+	color: #594300 !important;
+	border-top-width: 2px !important;
+}
+
+.active-listo{
+	border: 0 solid #14892c !important;
+	color: #14892c !important;
+	border-top-width: 2px !important;
+}
+
+.inactive{
+	color: #BDBDBD !important;
+}
+
+.activated{
+	border-width: 0px !important;
+}

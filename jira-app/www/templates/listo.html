@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <ion-view view-title="Finalizado">
+    <ion-content class="padding">
+  <!--home template-->
+        <!--Cartas con los distintos tasks-->
+            <div ng-repeat = "task in tasks">
+              <a class="item">
+                <h2 class="key">{{task.key}}</h2>
+                <span class="badge" ng-class="getClass(task.fields.status.name)">{{task.fields.status.name}}</span>
+                <p class="resumen-incidencia">{{task.fields.summary}}</p>
+                <p class ="descripcion">
+                  {{task.fields.description}}
+                </p>
+              </a>
+            </div>
+    </ion-content>
+  </ion-view>
+</html>

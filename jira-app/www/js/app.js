@@ -21,8 +21,8 @@ angular.module('starter', ['ionic'])
       }
     })
 
-  .state('sidemenu.boards',{
-    url: "/boards",
+  .state('sidemenu.tabmenu',{
+    url: "/board_view",
     views:{
       'menuContent':{
         templateUrl: "templates/tab-menu.html",
@@ -30,38 +30,46 @@ angular.module('starter', ['ionic'])
     }
   })
 
-  .state('sidemenu.boards.backlog',{
+  .state('sidemenu.tabmenu.backlog',{
     url: "/backlog",
     views:{
       'tabContent':{
         templateUrl: "templates/backlog.html",
         controller: "BLCtrl",
-        activetab: "progreso"
       }
     }
   })
 
-  .state('sidemenu.boards.progreso',{
+  .state('sidemenu.tabmenu.progreso',{
     url: "/progreso",
     views:{
       'tabContent':{
         templateUrl: "templates/progreso.html",
         controller: "ProCtrl",
-        activetab: "progreso"
       }
     }
   })
 
-  .state('sidemenu.boards.listo',{
+  .state('sidemenu.tabmenu.listo',{
     url: "/listo",
     views:{
       'tabContent':{
         templateUrl: "templates/listo.html",
         controller: "LiCtrl",
-        activetab: "listo"
       }
     }
   })
+
+  .state('sidemenu.project',{
+    url: "/project",
+    views:{
+      'menuContent':{
+        templateUrl: "templates/boards.html",
+        controller: "ProyCtrl",
+      }
+    }
+  })
+
   $urlRouterProvider.otherwise("/principal/home");
 })
 
@@ -72,9 +80,46 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('CardCtrl',function($scope, $http){
-  $http.get('issues.json').success(function(data) {
-    $scope.tasks = data.issues;
-  })
+  $scope.toggleGroup = function(group) {
+    if ($scope.isGroupShown(group)) {
+      $scope.shownGroup = null;
+    } else {
+      $scope.shownGroup = group;
+    }
+  };
+  $scope.isGroupShown = function(group) {
+    return $scope.shownGroup === group;
+  };
+
+  //obtencion de todos los projectos en el sistema
+  $http.get('https://bcinnovacion.atlassian.net/rest/api/2/project').
+    success(function(data, status, headers, config) {
+      $scope.projects = data;
+
+      for(i=0; i<= $scope.projects.length; i++){
+        var project = $scope.projects[i];
+        var url = 'https://bcinnovacion.atlassian.net/rest/api/2/search?jql=project="'+project.key+'"%20and%20assignee%20in%20(currentUser())';
+        $http.get(url).
+          success(function(data, status, headers, config) {
+            $scope.tasks = data.issues;
+          // this callback will be called asynchronously
+          // when the response is available
+        }).
+        error(function(data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+        });    
+      };
+
+      // this callback will be called asynchronously
+      // when the response is available
+    }).
+    error(function(data, status, headers, config) {
+      // called asynchronously if an error occurs
+      // or server returns response with an error status.
+    });
+
+    
 
   $scope.getClass = function(name){
     var clase;
@@ -156,7 +201,7 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('ProCtrl',function($scope, $http){
-  $http.get('issues.json').success(function(data) {
+  $http.get('enprogreso.json').success(function(data) {
     $scope.tasks = data.issues;
   })
 
@@ -205,7 +250,15 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.run(function($ionicPlatform) {
+.controller('NewICtrl',function($scope, $http){
+  $scope.nuevo_issue = {proyecto: '', incidencia: '', resumen:'', prioridad : '', descripcion: '' };
+  
+  var a = '{"fields": {"project":{"key": "TEST"},"summary":'+ $scope.nuevo_issue.resumen+',"description":'+ $scope.nuevo_issue.descripcion+',"issuetype": {"name": "Bug"}   }}';
+  console.log(a);
+})
+
+.run(function($ionicPlatform, $http) {
+  $http.defaults.headers.common.Authorization = 'Basic bWF0aWFzLmNhbXBvczpRdWVzbzEyNA=='
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

@@ -6,7 +6,7 @@
       <!--Cartas con los distintos tasks-->
       <div ng-repeat = "project in projects">
         <div class="item item-divider item-stable" ng-click="toggleGroup(project)" ng-class="{active: isGroupShown(project)}">
-          {{project.name}}
+          {{project}}
         </div>
         <div ng-repeat = "task in tasks">
           <a class="item item-accordion"

@@ -4,27 +4,37 @@
       <ion-header-bar class= "bar-positive">
         <button class="button button-clear button-positive" ng-click="closeModal()">Cancelar</button>
         <h1 class="title">Crear Incidencia</h1>
-        <button type="submit" class="button button-clear button-positive">OK</button>
+        <button type="submit" ng-click="addIssue()" class="button button-clear button-positive">OK</button>
       </ion-header-bar>
 <!--inicio de la forma para ingresar nuevo issue-->
       <form role="form">
         <ion-content>
           <div class="list">
-            <label class="item item-input">
-              <input id="Proyecto" type="text" placeholder="proyecto" ng-model="nuevo_issue.proyecto">
-            </label>
-            <label class="item item-input">
-              <input id="Incidencia" type="text" placeholder="incidencia" ng-model="nuevo_issue.incidencia">
-            </label>
+            
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Proyecto
+            </div>
+            <select ng-model="nuevo_issue.proyecto" ng-options="project.name for project in projects">
+            </select><br>
+          </label>
+
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Tipo
+            </div>
+            <select ng-model="nuevo_issue.tipo" ng-options="type.name for type in types"></select><br>
+          </label>
             <label class="item item-input">
               <input id="resumen" type="text" placeholder="Resumen" ng-model="nuevo_issue.resumen">
             </label>
-            <label class="item item-input">
-              <input id="prioridad" type="text" placeholder="Prioridad" ng-model="nuevo_issue.prioridad">
-            </label>
-            <label class="item item-input">
-              <input id="informador" type="text" placeholder="Informador" ng-model="nuevo_issue.informador">
-            </label>
+            <label class="item item-input item-select">
+            <div class="input-label">
+              Informador
+            </div>
+            <select ng-model="nuevo_issue.informador" ng-options="reporter.displayName for reporter in reporters">
+            </select><br>
+          </label>
             <label class="item item-input">
               <input id="descripcion" type="text" placeholder="Descripción" ng-model="nuevo_issue.descripcion">
             </label>

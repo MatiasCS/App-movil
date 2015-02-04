@@ -1,0 +1,14 @@
+{
+    "fields": {
+       "project":
+       {
+          "id": "10500"
+       },
+       "summary": "Creado usando Rest API",
+       "description": "Creating of an issue using project keys and issue type names using the REST API",
+       "reporter":{"name":"matias.campos"},
+       "issuetype": {
+          "name": "Tarea"
+       }
+   }
+}

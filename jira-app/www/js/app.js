@@ -3,6 +3,40 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
+
+if (!Array.prototype.indexOf) {
+    Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+        "use strict";
+        if (this == null) {
+            throw new TypeError();
+        }
+        var t = Object(this);
+        var len = t.length >>> 0;
+        if (len === 0) {
+            return -1;
+        }
+        var n = 0;
+        if (arguments.length > 1) {
+            n = Number(arguments[1]);
+            if (n != n) { // para verificar si es NaN
+                n = 0;
+            } else if (n != 0 && n != Infinity && n != -Infinity) {
+                n = (n > 0 || -1) * Math.floor(Math.abs(n));
+            }
+        }
+        if (n >= len) {
+            return -1;
+        }
+        var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+        for (; k < len; k++) {
+            if (k in t && t[k] === searchElement) {
+                return k;
+            }
+        }
+        return -1;
+    }
+}
+
 angular.module('starter', ['ionic'])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -79,7 +113,7 @@ angular.module('starter', ['ionic'])
   }
 })
 
-.controller('CardCtrl',function($scope, $http){
+.controller('CardCtrl',function($scope, $http, $rootScope){
   $scope.toggleGroup = function(group) {
     if ($scope.isGroupShown(group)) {
       $scope.shownGroup = null;
@@ -92,32 +126,29 @@ angular.module('starter', ['ionic'])
   };
 
   //obtencion de todos los projectos en el sistema
-  $http.get('https://bcinnovacion.atlassian.net/rest/api/2/project').
+  var url = 'https://bcinnovacion.atlassian.net/rest/api/2/search?jql=assignee%20in%20(currentUser())';        
+  $http.get(url).
     success(function(data, status, headers, config) {
-      $scope.projects = data;
-
-      for(i=0; i<= $scope.projects.length; i++){
-        var project = $scope.projects[i];
-        var url = 'https://bcinnovacion.atlassian.net/rest/api/2/search?jql=project="'+project.key+'"%20and%20assignee%20in%20(currentUser())';
-        $http.get(url).
-          success(function(data, status, headers, config) {
-            $scope.tasks = data.issues;
-          // this callback will be called asynchronously
-          // when the response is available
-        }).
-        error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-        });    
-      };
-
-      // this callback will be called asynchronously
-      // when the response is available
-    }).
-    error(function(data, status, headers, config) {
-      // called asynchronously if an error occurs
-      // or server returns response with an error status.
-    });
+      $scope.tasks = data.issues;
+      $scope.projects = [];
+      for (i = 0; i < $scope.tasks.length; i++){
+        var nombre = $scope.tasks[i].fields.project.name
+        if($scope.projects.indexOf(nombre)){
+          $scope.projects.push(nombre);
+        }
+      }
+      /*
+      if($scope.tasks.length){
+        console.log(nombre);
+        $scope.projects.push(proyectos[i]);
+      }
+    // this callback will be called asynchronously
+    // when the response is available*/
+  }).
+  error(function(data, status, headers, config) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+  });    
 
     
 
@@ -250,13 +281,64 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('NewICtrl',function($scope, $http){
-  $scope.nuevo_issue = {proyecto: '', incidencia: '', resumen:'', prioridad : '', descripcion: '' };
-  
-  var a = '{"fields": {"project":{"key": "TEST"},"summary":'+ $scope.nuevo_issue.resumen+',"description":'+ $scope.nuevo_issue.descripcion+',"issuetype": {"name": "Bug"}   }}';
-  console.log(a);
-})
+.controller('NewICtrl',function($scope, $http, $ionicPopup){
+  $scope.nuevo_issue = {proyecto: '', tipo: '', resumen:'', informador : '', descripcion:'' };
 
+  url_get_projects = 'https://bcinnovacion.atlassian.net/rest/api/2/project';
+  url_get_types = 'https://bcinnovacion.atlassian.net/rest/api/2/issuetype';
+
+  $http.get(url_get_projects).success(function(data){
+    $scope.projects = data;
+  });
+
+  $http.get(url_get_types).success(function(data) {
+    $scope.types = data;
+  });
+
+  $http.get(url_get_types).success(function(data) {
+    $scope.types = data;
+  });
+
+  url_get_reporters = 'https://bcinnovacion.atlassian.net/rest/api/2/user/assignable/search?project=IAC';
+  
+   $http.get(url_get_reporters).success(function(data) {
+    $scope.reporters = data;
+  });
+
+  $scope.addIssue = function(){
+      var datos = {
+              "fields": {
+                 "project":
+                 {
+                    "id": $scope.nuevo_issue.proyecto.id 
+                 },
+                 "summary": $scope.nuevo_issue.resumen,
+                 "description": $scope.nuevo_issue.descripcion,
+                 "reporter":{"name":$scope.nuevo_issue.informador.name},
+                 "issuetype": {
+                    "name": $scope.nuevo_issue.tipo.name
+                 }
+             }
+          };
+
+      console.log(datos);
+      var url_nuevo_issue = 'https://bcinnovacion.atlassian.net/rest/api/2/issue'
+      $http.post(url_nuevo_issue, datos).
+      success(function(data, status, headers, config) {
+        //Ventana de alerta personalizar
+        var alertPopup = $ionicPopup.alert({
+          title: 'EXITO',
+          template: 'Incidencia creada con exito!'
+        });
+      }).
+      error(function(data, status, headers, config) {
+        console.log(data)
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+      })
+
+  };
+})
 .run(function($ionicPlatform, $http) {
   $http.defaults.headers.common.Authorization = 'Basic bWF0aWFzLmNhbXBvczpRdWVzbzEyNA=='
   $ionicPlatform.ready(function() {

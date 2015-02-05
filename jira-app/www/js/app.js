@@ -37,9 +37,11 @@ if (!Array.prototype.indexOf) {
     }
 }
 
-angular.module('starter', ['ionic'])
+angular.module('starter', ['ionic','starter.services'])
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $compileProvider) {
+  $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
+  
   $stateProvider.state('sidemenu', {
     url: '/principal',
     templateUrl: "templates/side-bar.html"
@@ -100,6 +102,16 @@ angular.module('starter', ['ionic'])
       'menuContent':{
         templateUrl: "templates/boards.html",
         controller: "ProyCtrl",
+      }
+    }
+  })
+
+  .state('sidemenu.takepicture',{
+    url: "/camera",
+    views:{
+      'menuContent':{
+        templateUrl: "templates/picture.html",
+        controller: "PicCtrl",
       }
     }
   })
@@ -284,7 +296,7 @@ angular.module('starter', ['ionic'])
 .controller('NewICtrl',function($scope, $http, $ionicPopup){
   $scope.nuevo_issue = {proyecto: '', tipo: '', resumen:'', informador : '', descripcion:'' };
 
-  url_get_projects = 'https://bcinnovacion.atlassian.net/rest/api/2/project';
+  url_get_projects = 'https://bcinnovacion.atlassian.net/rest/api/2/search?=';
   url_get_types = 'https://bcinnovacion.atlassian.net/rest/api/2/issuetype';
 
   $http.get(url_get_projects).success(function(data){
@@ -339,6 +351,39 @@ angular.module('starter', ['ionic'])
 
   };
 })
+
+.controller('PicCtrl', function($scope, $http, $ionicPopup, Camera){
+
+  $scope.getPhoto = function() {
+    Camera.getPicture().then(function(imageURI) {
+      console.log(imageURI);
+      $scope.lastPhoto = imageURI;
+    }, function(err) {
+      console.err(err);
+    }, {
+      quality: 75,
+      targetWidth: 320,
+      targetHeight: 320,
+      saveToPhotoAlbum: false
+    });
+  };
+
+  url_subida= 'https://bcinnovacion.atlassian.net/rest/api/2/user/avatar/temporary?username=matias.campos&filename=profile-icon.png';
+  url_temporal = 'https://bcinnovacion.atlassian.net/rest/api/2/user/avatar?username=matias.campos';
+  url_set = 'https://bcinnovacion.atlassian.net/rest/api/2/user/avatar?username=matias.campos';
+
+  var fd = new FormData();
+
+  $http.post(url_subida, "profile-icon.png",{
+        headers:{'Content-Type':'image/png',
+        'X-Atlassian-Token': 'no-check'
+        }
+    }).
+  success(function(data){
+    console.log(data);
+  });
+})
+
 .run(function($ionicPlatform, $http) {
   $http.defaults.headers.common.Authorization = 'Basic bWF0aWFzLmNhbXBvczpRdWVzbzEyNA=='
   $ionicPlatform.ready(function() {
